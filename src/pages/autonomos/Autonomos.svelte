@@ -35,12 +35,12 @@
       </tr>
     </thead>
     <tbody>
-      {#each itens as autonomo}
+      {#each itens as item}
         <tr>
-          <td>{autonomo.nome}</td>
-          <td>{autonomo.cpf}</td>
+          <td>{item.nome}</td>
+          <td>{item.cpf}</td>
           <td class="text-end">
-            <a class="btn btn-sm btn-link" href={`/autonomos/${autonomo.id}`} use:link>
+            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}`} use:link>
               <i class="bi-pencil" title="Editar autônomo" />
             </a>
             <button class="btn btn-sm btn-link">
@@ -49,7 +49,7 @@
             <button class="btn btn-sm btn-link">
               <i class="bi-cash-stack" title="Pagamentos" />
             </button>
-            <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(autonomo)}>
+            <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(item)}>
               <i class="bi-trash3" title="Excluir autônomo" />
             </button>
           </td>
