@@ -21,12 +21,21 @@ class AutonomosService {
   async salvar(item: Autonomo): Promise<void> {
     const index = this.MOCK.findIndex(a => a.id === item.id);
     if (index === -1) {
-      this.MOCK = [...this.MOCK, { ...item, id: nanoid() }];
-      console.log('adicionando mais:', this.MOCK.length);
+      this.MOCK.push({ ...item, id: nanoid() });
     } else {
-      this.MOCK = this.MOCK.splice(index, 1, item);
+      this.MOCK.splice(index, 1, item);
       console.log('substituindo:', this.MOCK.length);
     }
+  }
+
+  async remover(item: Autonomo): Promise<boolean> {
+    if (confirm(`Confirma a exclusão de "${item.nome}?"`)) {
+      console.log('Removendo', item);
+      this.MOCK = this.MOCK.filter(aut => aut.id !== item.id);
+      console.log(this.MOCK);
+      return true;
+    }
+    return false;
   }
 }
 

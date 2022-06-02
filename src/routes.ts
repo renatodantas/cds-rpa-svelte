@@ -1,5 +1,5 @@
-import AutonomoEdit from "./pages/AutonomoEdit.svelte";
-import Autonomos from "./pages/Autonomos.svelte";
+import AutonomoEdit from "./pages/autonomos/AutonomoEdit.svelte";
+import Autonomos from "./pages/autonomos/Autonomos.svelte";
 import Home from "./pages/Home.svelte";
 import NotFound from "./pages/NotFound.svelte";
 

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
-  import { AUTONOMO_DEFAULT_VALUE, type Autonomo } from '../models/autonomo';
-  import { autonomoService } from '../services/autonomos.service';
+  import { AUTONOMO_DEFAULT_VALUE, type Autonomo } from '../../models/autonomo';
+  import { autonomoService } from '../../services/autonomos.service';
 
   // Path params
   export let params: Record<string, string>;
@@ -26,7 +26,7 @@
 </script>
 
 <div class="container">
-  <h1 class="mb-5">Editar Autônomo</h1>
+  <h1 class="mb-4">Editar Autônomo</h1>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">
@@ -69,8 +69,9 @@
 
     <div class="w-100 d-none d-md-block" />
 
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-primary">Salvar</button>
+    <div class="col-md">
+      <button type="submit" class="btn btn-primary shadow-sm mx-2">Salvar</button>
+      <button type="submit" class="btn btn-light shadow-sm">Cancelar</button>
     </div>
   </form>
 </div>
