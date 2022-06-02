@@ -26,8 +26,8 @@
     <thead>
       <tr>
         <th>Descrição</th>
-        <th colspan="2">Centro de Custo</th>
-        <th style="width: 10rem" class="text-end">
+        <th>Centro de Custo</th>
+        <th style="width: 6rem" class="text-end">
           <a class="btn btn-primary btn-sm" href="/cargos/novo" use:link>
             <i class="bi-plus" /> Novo
           </a>
@@ -38,8 +38,7 @@
       {#each itens as item}
         <tr>
           <td>{item.descricao}</td>
-          <td>{item.centroCustoCodigo}</td>
-          <td>{item.centroCustoDescricao}</td>
+          <td>{item.centroCustoCodigo} - {item.centroCustoDescricao}</td>
           <td class="text-end">
             <a class="btn btn-sm btn-link" href={`/cargos/${item.id}`} use:link>
               <i class="bi-pencil" title="Editar cargo" />
