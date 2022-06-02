@@ -2,13 +2,13 @@
   import { onMount } from 'svelte';
   import { link } from 'svelte-spa-router';
   import type { Autonomo } from '../models/autonomo';
-  import { AutonomosService } from '../services/autonomos.service';
+  import { autonomoService } from '../services/autonomos.service';
 
-  const service = new AutonomosService();
   let lista: Autonomo[] = [];
 
   onMount(async () => {
-    lista = await service.listar();
+    console.log('montou');
+    lista = await autonomoService.list();
   });
 </script>
 
@@ -22,7 +22,11 @@
         <th>CPF</th>
         <th>Início Contrato</th>
         <th>Fim Contrato</th>
-        <th style="width: 10rem" />
+        <th style="width: 10rem" class="text-end">
+          <a class="btn btn-primary btn-sm" href="/autonomos/novo" use:link>
+            <i class="bi-plus" /> Novo
+          </a>
+        </th>
       </tr>
     </thead>
     <tbody>
