@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { push } from 'svelte-spa-router';
+  import { pop } from 'svelte-spa-router';
   import { AUTONOMO_DEFAULT_VALUE, type Autonomo } from '../../models/autonomo';
   import { autonomoService } from '../../services/autonomos.service';
 
@@ -15,10 +15,12 @@
     }
   });
 
+  const voltar = () => pop();
+
   const salvar = async () => {
     try {
       await autonomoService.salvar(item);
-      push('/autonomos');
+      voltar();
     } catch (err) {
       console.log('Deu erro:', Error(err));
     }
@@ -71,7 +73,7 @@
 
     <div class="col-md">
       <button type="submit" class="btn btn-primary shadow-sm mx-2">Salvar</button>
-      <button type="submit" class="btn btn-light shadow-sm">Cancelar</button>
+      <button type="button" class="btn btn-light shadow-sm" on:click={pop}>Cancelar</button>
     </div>
   </form>
 </div>

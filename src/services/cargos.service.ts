@@ -3,7 +3,7 @@ import type { Cargo } from '../models/cargo';
 
 class CargosService {
 
-  private MOCK: Cargo[] = [
+  MOCK: Cargo[] = [
     { id: nanoid(), descricao: 'Auxiliar de motorista', centroCustoCodigo: '011', centroCustoDescricao: 'Transporte' },
     { id: nanoid(), descricao: 'Auxiliar de logística', centroCustoCodigo: '008', centroCustoDescricao: 'Logística' },
     { id: nanoid(), descricao: 'Motorista', centroCustoCodigo: '145', centroCustoDescricao: 'Transporte' },

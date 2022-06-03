@@ -27,7 +27,7 @@
       <tr>
         <th>Nome</th>
         <th>CPF</th>
-        <th style="width: 10rem" class="text-end">
+        <th style="width: 13rem" class="text-end">
           <a class="btn btn-primary btn-sm" href="/autonomos/novo" use:link>
             <i class="bi-plus" /> Novo
           </a>
@@ -43,12 +43,15 @@
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}`} use:link>
               <i class="bi-pencil" title="Editar autônomo" />
             </a>
-            <button class="btn btn-sm btn-link">
+            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/contratos`} use:link>
+              <i class="bi-shield-check" title="Contratos" />
+            </a>
+            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/diarias`} use:link>
               <i class="bi-calendar2-week" title="Diárias" />
-            </button>
-            <button class="btn btn-sm btn-link">
+            </a>
+            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/pagamentos`} use:link>
               <i class="bi-cash-stack" title="Pagamentos" />
-            </button>
+            </a>
             <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(item)}>
               <i class="bi-trash3" title="Excluir autônomo" />
             </button>
