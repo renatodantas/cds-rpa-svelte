@@ -1,34 +1,34 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { pop } from 'svelte-spa-router';
+  import type { Autonomo } from '../../../models/autonomo';
   import { CONTRATO_DEFAULT_VALUE, type Contrato } from '../../../models/contrato';
+  import { autonomoService } from '../../../services/autonomos.service';
   import { contratoService } from '../../../services/contratos.service';
-  import { convertStringToDecimal } from '../../../utils/converters';
+  import { stringToDecimal } from '../../../utils/actions';
 
   // Path params
   export let params: Record<string, string>;
+  let autonomo: Autonomo;
   $: contratoId = params.id_contrato;
+  $: autonomoId = params.id;
 
   let item: Contrato = { ...CONTRATO_DEFAULT_VALUE };
 
   onMount(async () => {
+    autonomo = await autonomoService.getByID(autonomoId);
     if (contratoId !== 'novo') {
       item = await contratoService.getByID(contratoId);
     }
   });
 
-  // const atualizar = (event, field) => {
-  //   console.log(event);
-  //   item[field] = event.target.value;
-  // };
-
   const voltar = () => pop();
 
   const salvar = async () => {
     try {
-      item.valorVT = convertStringToDecimal(item.valorVT.toString());
-      item.valorVR = convertStringToDecimal(item.valorVR.toString());
-      item.valorDiaria = convertStringToDecimal(item.valorDiaria.toString());
+      // item.valorVT = convertStringToDecimal(item.valorVT.toString());
+      // item.valorVR = convertStringToDecimal(item.valorVR.toString());
+      // item.valorDiaria = convertStringToDecimal(item.valorDiaria.toString());
 
       await contratoService.salvar(item);
       voltar();
@@ -39,7 +39,17 @@
 </script>
 
 <div class="container">
-  <h1 class="mb-4">Editar Contrato</h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="#/autonomos">Autônomos</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href={`#/autonomos/${autonomoId}/contratos`}>Contratos de {autonomo?.nome}</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Editar Contrato</li>
+    </ol>
+  </nav>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">
@@ -76,6 +86,7 @@
           id="valorVT"
           placeholder="valorVT"
           bind:value={item.valorVT}
+          use:stringToDecimal={{ obj: item, attr: 'valorVT' }}
         />
         <label for="valorVT">Valor do VT (R$)</label>
       </div>

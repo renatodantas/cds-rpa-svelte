@@ -28,7 +28,16 @@
 </script>
 
 <div class="container">
-  <h1 class="mb-4">Contratos de {autonomo?.nome}</h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="#">Autônomos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Contratos de {autonomo?.nome}
+      </li>
+    </ol>
+  </nav>
 
   <table class="table table-bordered table-striped">
     <thead>

@@ -28,7 +28,14 @@
 </script>
 
 <div class="container">
-  <h1 class="mb-4">Editar Cargo</h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="#/cargos">Cargos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Editar Cargo</li>
+    </ol>
+  </nav>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">
