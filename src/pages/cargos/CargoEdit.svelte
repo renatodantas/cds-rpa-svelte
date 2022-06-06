@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { pop } from 'svelte-spa-router';
+  import Breadcrumb from '../../lib/Breadcrumb.svelte';
   import { CARGO_DEFAULT_VALUE, type Cargo } from '../../models/cargo';
   import { cargosService } from '../../services/cargos.service';
 
@@ -28,14 +29,7 @@
 </script>
 
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="#/cargos">Cargos</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">Editar Cargo</li>
-    </ol>
-  </nav>
+  <Breadcrumb items={[{ label: 'Cargos', link: '#/cargos' }]}>Editar Cargo</Breadcrumb>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { link } from 'svelte-spa-router';
+  import Breadcrumb from '../../lib/Breadcrumb.svelte';
   import type { Cargo } from '../../models/cargo';
   import { cargosService } from '../../services/cargos.service';
 
@@ -20,11 +21,7 @@
 </script>
 
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Cargos</li>
-    </ol>
-  </nav>
+  <Breadcrumb>Cargos</Breadcrumb>
 
   <table class="table table-bordered table-striped">
     <thead>

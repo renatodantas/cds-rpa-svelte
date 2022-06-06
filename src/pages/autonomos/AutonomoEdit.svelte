@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { pop } from 'svelte-spa-router';
+  import Breadcrumb from '../../lib/Breadcrumb.svelte';
   import { AUTONOMO_DEFAULT_VALUE, type Autonomo } from '../../models/autonomo';
   import { autonomoService } from '../../services/autonomos.service';
 
@@ -28,14 +29,7 @@
 </script>
 
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="#/autonomos">Autônomos</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">Editar Autônomo</li>
-    </ol>
-  </nav>
+  <Breadcrumb items={[{ label: 'Autônomos', link: '#/autonomos' }]}>Editar Autônomo</Breadcrumb>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">

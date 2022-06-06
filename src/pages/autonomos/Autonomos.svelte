@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { link } from 'svelte-spa-router';
+  import Breadcrumb from '../../lib/Breadcrumb.svelte';
   import type { Autonomo } from '../../models/autonomo';
   import { autonomoService } from '../../services/autonomos.service';
 
@@ -20,11 +21,7 @@
 </script>
 
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Autônomos</li>
-    </ol>
-  </nav>
+  <Breadcrumb>Autônomos</Breadcrumb>
 
   <table class="table table-bordered table-striped">
     <thead>
