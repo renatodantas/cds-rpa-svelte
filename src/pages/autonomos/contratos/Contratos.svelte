@@ -23,7 +23,7 @@
 
   async function encerrar(item: Contrato) {
     await contratoService.encerrar(item);
-    listar();
+    await listar();
   }
 </script>
 
@@ -60,7 +60,7 @@
               <i class="bi-pencil" title="Editar contrato" />
             </a>
             <button class="btn btn-sm btn-link" on:click|preventDefault={() => encerrar(item)}>
-              <i class="bi-trash3" title="Encerrar contrato" />
+              <i class="bi-shield-slash" title="Encerrar contrato" />
             </button>
           </td>
         </tr>

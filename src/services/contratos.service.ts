@@ -10,7 +10,7 @@ class ContratosService {
   )
 
   async list(idAutonomo: string): Promise<Contrato[]> {
-    return this.MOCK;
+    return this.MOCK.filter(contrato => !contrato.encerradoManualmente);
   }
 
   async getByID(idControato: string): Promise<Contrato | undefined> {

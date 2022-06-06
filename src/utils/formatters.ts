@@ -3,5 +3,8 @@ export const formatDate = (data: string) => {
 }
 
 export const formatDecimal = (valor?: number) => {
-  return valor ? Intl.NumberFormat('pt-BR').format(valor) : '-';
+  if (!valor) return undefined;
+  return Intl
+    .NumberFormat('pt-BR', { minimumFractionDigits: 2 })
+    .format(valor);
 }

@@ -3,6 +3,7 @@
   import { pop } from 'svelte-spa-router';
   import { CONTRATO_DEFAULT_VALUE, type Contrato } from '../../../models/contrato';
   import { contratoService } from '../../../services/contratos.service';
+  import { convertStringToDecimal } from '../../../utils/converters';
 
   // Path params
   export let params: Record<string, string>;
@@ -16,18 +17,25 @@
     }
   });
 
+  // const atualizar = (event, field) => {
+  //   console.log(event);
+  //   item[field] = event.target.value;
+  // };
+
   const voltar = () => pop();
 
   const salvar = async () => {
     try {
+      item.valorVT = convertStringToDecimal(item.valorVT.toString());
+      item.valorVR = convertStringToDecimal(item.valorVR.toString());
+      item.valorDiaria = convertStringToDecimal(item.valorDiaria.toString());
+
       await contratoService.salvar(item);
       voltar();
     } catch (err) {
       console.log('Deu erro:', Error(err));
     }
   };
-
-  $: console.log(item);
 </script>
 
 <div class="container">
@@ -63,8 +71,6 @@
       <div class="form-floating">
         <input
           type="number"
-          min="0.00"
-          max="10000.00"
           step="0.01"
           class="form-control"
           id="valorVT"
