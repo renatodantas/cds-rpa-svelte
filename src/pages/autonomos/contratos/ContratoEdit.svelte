@@ -7,6 +7,7 @@
   import { autonomoService } from '../../../services/autonomos.service';
   import { contratoService } from '../../../services/contratos.service';
   import { stringToDecimal } from '../../../utils/actions';
+  import { convertToNumber } from '../../../utils/converters';
 
   // Path params
   export let params: Record<string, string>;
@@ -15,6 +16,7 @@
   $: autonomoId = params.id;
 
   let item: Contrato = { ...CONTRATO_DEFAULT_VALUE };
+  $: console.log('valorVT::', item.valorVT, typeof item.valorVT);
 
   onMount(async () => {
     autonomo = await autonomoService.getByID(autonomoId);
@@ -27,10 +29,9 @@
 
   const salvar = async () => {
     try {
-      // item.valorVT = convertStringToDecimal(item.valorVT.toString());
-      // item.valorVR = convertStringToDecimal(item.valorVR.toString());
-      // item.valorDiaria = convertStringToDecimal(item.valorDiaria.toString());
-
+      item.valorVT = convertToNumber(item.valorVT);
+      item.valorVR = convertToNumber(item.valorVR);
+      item.valorDiaria = convertToNumber(item.valorDiaria);
       await contratoService.salvar(item);
       voltar();
     } catch (err) {
@@ -46,7 +47,7 @@
       { label: `Contratos de ${autonomo?.nome}`, link: `#/autonomos/${autonomoId}/contratos` },
     ]}
   >
-    Contratos de {autonomo?.nome}
+    Editar Contrato
   </Breadcrumb>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
@@ -78,13 +79,12 @@
     <div class="col-md">
       <div class="form-floating">
         <input
-          type="number"
-          step="0.01"
+          type="text"
           class="form-control"
           id="valorVT"
           placeholder="valorVT"
-          bind:value={item.valorVT}
           use:stringToDecimal={{ obj: item, attr: 'valorVT' }}
+          bind:value={item.valorVT}
         />
         <label for="valorVT">Valor do VT (R$)</label>
       </div>
