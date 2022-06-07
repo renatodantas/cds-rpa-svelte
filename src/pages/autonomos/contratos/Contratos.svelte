@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
   import { link } from 'svelte-spa-router';
   import Breadcrumb from '../../../lib/Breadcrumb.svelte';
@@ -6,7 +7,7 @@
   import type { Contrato } from '../../../models/contrato';
   import { autonomoService } from '../../../services/autonomos.service';
   import { contratoService } from '../../../services/contratos.service';
-  import { formatDate, formatDecimal } from '../../../utils/formatters';
+  import { formatDecimal } from '../../../utils/formatters';
 
   // Path params
   export let params: Record<string, string>;
@@ -17,15 +18,19 @@
 
   onMount(() => listar());
 
-  async function listar() {
+  const listar = async () => {
     autonomo = await autonomoService.getByID(autonomoId);
     itens = await contratoService.list(autonomoId);
-  }
+  };
 
-  async function encerrar(item: Contrato) {
+  const isContratoVencido = (data: DateTime): boolean => {
+    return data.startOf('day') < DateTime.now().startOf('day');
+  };
+
+  const encerrar = async (item: Contrato) => {
     await contratoService.encerrar(item);
     await listar();
-  }
+  };
 </script>
 
 <div class="container">
@@ -51,9 +56,9 @@
     </thead>
     <tbody>
       {#each itens as item}
-        <tr>
-          <td>{formatDate(item.vigenciaInicio)}</td>
-          <td>{formatDate(item.vigenciaFim)}</td>
+        <tr class:table-danger={isContratoVencido(item.vigenciaFim)}>
+          <td>{item.vigenciaInicio.toLocaleString()}</td>
+          <td>{item.vigenciaFim.toLocaleString()}</td>
           <td>{formatDecimal(item.valorVT) || '-'}</td>
           <td>{formatDecimal(item.valorVR) || '-'}</td>
           <td>{formatDecimal(item.valorDiaria) || '-'}</td>

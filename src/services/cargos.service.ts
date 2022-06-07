@@ -10,7 +10,7 @@ class CargosService {
   ]
 
   async list(): Promise<Cargo[]> {
-    return this.MOCK;
+    return this.MOCK.sort((a, b) => a.descricao.localeCompare(b.descricao));
   }
 
   async getByID(id: string): Promise<Cargo | undefined> {

@@ -1,7 +1,5 @@
 export const convertToDecimal = (value?: any): number | null => {
-  if (!value) {
-    return;
-  }
+  if (!value) return;
 
   // Converte o valor para "number" e atribui ao objeto
   const numberWithoutDots = value.replace(/\D/g, '');

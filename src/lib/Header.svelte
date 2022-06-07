@@ -9,10 +9,10 @@
         <a href="/" use:link class="nav-link" class:active={$location === '/'} aria-current="page"> Home </a>
       </li>
       <li class="nav-item">
-        <a href="/autonomos" use:link class="nav-link" class:active={$location.startsWith('/autonomos')}> Autônomos </a>
+        <a href="/cargos" use:link class="nav-link" class:active={$location.startsWith('/cargos')}> Cargos </a>
       </li>
       <li class="nav-item">
-        <a href="/cargos" use:link class="nav-link" class:active={$location.startsWith('/cargos')}> Cargos </a>
+        <a href="/autonomos" use:link class="nav-link" class:active={$location.startsWith('/autonomos')}> Autônomos </a>
       </li>
     </ul>
   </header>
