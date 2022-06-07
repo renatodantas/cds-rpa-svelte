@@ -1,3 +1,6 @@
+import { convertToDecimal } from "./converters";
+import { formatDecimal } from "./formatters";
+
 interface StringToNumberParams {
   obj: object;
   attr: string;
@@ -11,26 +14,16 @@ interface StringToNumberParams {
  * @see https://svelte.dev/docs#template-syntax-element-directives-use-action
  */
 export const stringToDecimal = (node: HTMLInputElement, { obj, attr }: StringToNumberParams) => {
-  const { format } = new Intl.NumberFormat('pt-BR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
   const changeListener = (event: Event) => {
-    // Converte o valor para "number" e atribui ao objeto
-    const numberWithoutDots = node.value.replace(/\D/g, '');
-    const numberString = numberWithoutDots.substring(0, numberWithoutDots.length - 2)
-      + '.' + numberWithoutDots.substring(numberWithoutDots.length - 2);
-    const numberValue = parseFloat(numberString);
+    const numberValue = convertToDecimal(node.value);
     obj[attr] = numberValue;
 
     // Devolvendo o valor formatado ao input
-    node.value = format(numberValue);
-    console.log('Num. convertido e despachando:', format(numberValue));
-    node.dispatchEvent(new Event('change'));
+    node.value = formatDecimal(numberValue);
+    console.log('Num. convertido e despachando:', formatDecimal(numberValue));
   }
 
-  const events = ['focus', 'blur', 'keyup']
+  const events = ['keyup']
   events.forEach(evt => node.addEventListener(evt, changeListener));
 
   return {

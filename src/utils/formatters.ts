@@ -5,6 +5,6 @@ export const formatDate = (data: string) => {
 export const formatDecimal = (valor?: number) => {
   if (!valor) return undefined;
   return Intl
-    .NumberFormat('pt-BR', { minimumFractionDigits: 2 })
+    .NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     .format(valor);
 }

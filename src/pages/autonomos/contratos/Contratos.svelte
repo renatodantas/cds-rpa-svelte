@@ -54,9 +54,9 @@
         <tr>
           <td>{formatDate(item.vigenciaInicio)}</td>
           <td>{formatDate(item.vigenciaFim)}</td>
-          <td>{formatDecimal(item.valorVT)}</td>
-          <td>{formatDecimal(item.valorVR)}</td>
-          <td>{formatDecimal(item.valorDiaria)}</td>
+          <td>{formatDecimal(item.valorVT) || '-'}</td>
+          <td>{formatDecimal(item.valorVR) || '-'}</td>
+          <td>{formatDecimal(item.valorDiaria) || '-'}</td>
           <td>{item.cargo.descricao}</td>
           <td class="text-end">
             <a class="btn btn-sm btn-link" href={`/autonomos/${autonomoId}/contratos/${item.id}`} use:link>

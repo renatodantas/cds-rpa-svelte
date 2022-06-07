@@ -6,22 +6,28 @@
   import { CONTRATO_DEFAULT_VALUE, type Contrato } from '../../../models/contrato';
   import { autonomoService } from '../../../services/autonomos.service';
   import { contratoService } from '../../../services/contratos.service';
-  import { stringToDecimal } from '../../../utils/actions';
-  import { convertToNumber } from '../../../utils/converters';
+  import { formatDecimal } from '../../../utils/formatters';
+  import { handleCurencyInput } from '../../../utils/input-masks';
 
   // Path params
   export let params: Record<string, string>;
   let autonomo: Autonomo;
+  let valorVT: string;
+  let valorVR: string;
+  let valorDiaria: string;
+
   $: contratoId = params.id_contrato;
   $: autonomoId = params.id;
 
   let item: Contrato = { ...CONTRATO_DEFAULT_VALUE };
-  $: console.log('valorVT::', item.valorVT, typeof item.valorVT);
 
   onMount(async () => {
     autonomo = await autonomoService.getByID(autonomoId);
     if (contratoId !== 'novo') {
       item = await contratoService.getByID(contratoId);
+      valorVT = formatDecimal(item.valorVT) || '';
+      valorVR = formatDecimal(item.valorVR) || '';
+      valorDiaria = formatDecimal(item.valorDiaria) || '';
     }
   });
 
@@ -29,9 +35,6 @@
 
   const salvar = async () => {
     try {
-      item.valorVT = convertToNumber(item.valorVT);
-      item.valorVR = convertToNumber(item.valorVR);
-      item.valorDiaria = convertToNumber(item.valorDiaria);
       await contratoService.salvar(item);
       voltar();
     } catch (err) {
@@ -83,15 +86,24 @@
           class="form-control"
           id="valorVT"
           placeholder="valorVT"
-          use:stringToDecimal={{ obj: item, attr: 'valorVT' }}
-          bind:value={item.valorVT}
+          value={valorVT}
+          on:keyup={(e) => handleCurencyInput(e, item)}
+          on:focus={(e) => handleCurencyInput(e, item)}
         />
         <label for="valorVT">Valor do VT (R$)</label>
       </div>
     </div>
     <div class="col-md">
       <div class="form-floating">
-        <input type="valorVR" class="form-control" id="valorVR" placeholder="valorVR" bind:value={item.valorVR} />
+        <input
+          type="text"
+          class="form-control"
+          id="valorVR"
+          placeholder="valorVR"
+          value={valorVR}
+          on:keyup={(e) => handleCurencyInput(e, item)}
+          on:focus={(e) => handleCurencyInput(e, item)}
+        />
         <label for="valorVR">Valor do VR (R$)</label>
       </div>
     </div>
@@ -102,7 +114,9 @@
           class="form-control"
           id="valorDiaria"
           placeholder="valorDiaria"
-          bind:value={item.valorDiaria}
+          value={valorDiaria}
+          on:keyup={(e) => handleCurencyInput(e, item)}
+          on:focus={(e) => handleCurencyInput(e, item)}
         />
         <label for="valorDiaria">Valor da Diária (R$)</label>
       </div>
