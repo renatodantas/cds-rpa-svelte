@@ -48,7 +48,7 @@
               <i class="bi-shield-check" title="Contratos" />
             </a>
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/diarias`} use:link>
-              <i class="bi-calendar2-week" title="Diárias" />
+              <i class="bi-calendar-check" title="Diárias" />
             </a>
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/pagamentos`} use:link>
               <i class="bi-cash-stack" title="Pagamentos" />

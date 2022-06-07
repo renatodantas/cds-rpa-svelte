@@ -29,7 +29,6 @@ class AutonomosService {
   async remover(item: Autonomo): Promise<boolean> {
     if (confirm(`Confirma a exclusão de "${item.nome}?"`)) {
       this.MOCK = this.MOCK.filter(aut => aut.id !== item.id);
-      console.log(this.MOCK);
       return true;
     }
     return false;

@@ -13,8 +13,8 @@ class ContratosService {
     return this.MOCK.filter(contrato => !contrato.encerradoManualmente);
   }
 
-  async getByID(idControato: string): Promise<Contrato | undefined> {
-    return this.MOCK.find(item => item.id === idControato);
+  async getByID(idContrato: string): Promise<Contrato | undefined> {
+    return this.MOCK.find(item => item.id === idContrato);
   }
 
   async salvar(item: Contrato): Promise<void> {
