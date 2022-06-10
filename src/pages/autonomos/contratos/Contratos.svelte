@@ -59,9 +59,9 @@
         <tr class:table-danger={isContratoVencido(item.vigenciaFim)}>
           <td>{item.vigenciaInicio.toLocaleString()}</td>
           <td>{item.vigenciaFim.toLocaleString()}</td>
-          <td>{formatDecimal(item.valorVT) || '-'}</td>
-          <td>{formatDecimal(item.valorVR) || '-'}</td>
-          <td>{formatDecimal(item.valorDiaria) || '-'}</td>
+          <td class="text-end">{formatDecimal(item.valorVT) || '-'}</td>
+          <td class="text-end">{formatDecimal(item.valorVR) || '-'}</td>
+          <td class="text-end">{formatDecimal(item.valorDiaria) || '-'}</td>
           <td>{item.cargo.descricao}</td>
           <td class="text-end">
             <a class="btn btn-sm btn-link" href={`/autonomos/${autonomoId}/contratos/${item.id}`} use:link>

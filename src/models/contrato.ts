@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import type { Autonomo } from "./autonomo";
 import type { Cargo } from "./cargo";
+import type { Diaria } from './diaria';
 
 export interface Contrato {
   id?: string;
@@ -12,7 +13,7 @@ export interface Contrato {
   encerradoManualmente: boolean;
   autonomo: Autonomo;
   cargo: Cargo;
-  // opção de imprimir modelo
+  diarias: Diaria[];
 }
 
 export const CONTRATO_DEFAULT_VALUE: Contrato = {
@@ -21,5 +22,6 @@ export const CONTRATO_DEFAULT_VALUE: Contrato = {
   encerradoManualmente: false,
   valorVT: null,
   autonomo: null,
-  cargo: null
+  cargo: null,
+  diarias: []
 }

@@ -4,50 +4,49 @@
   import { pop } from 'svelte-spa-router';
   import Breadcrumb from '../../../lib/Breadcrumb.svelte';
   import type { Autonomo } from '../../../models/autonomo';
-  import type { Cargo } from '../../../models/cargo';
-  import { CONTRATO_DEFAULT_VALUE, type Contrato } from '../../../models/contrato';
+  import type { Contrato } from '../../../models/contrato';
+  import { DIARIA_DEFAULT_VALUE, type Diaria } from '../../../models/diaria';
   import { autonomoService } from '../../../services/autonomos.service';
-  import { cargosService } from '../../../services/cargos.service';
   import { contratoService } from '../../../services/contratos.service';
+  import { diariasService } from '../../../services/diarias.service';
   import { formatDecimal } from '../../../utils/formatters';
   import { handleCurencyInput } from '../../../utils/input-masks';
 
   // Path params
   export let params: Record<string, string>;
+  let item: Diaria = { ...DIARIA_DEFAULT_VALUE };
+
   let autonomo: Autonomo;
-  let cargos: Cargo[] = [];
-  let vigenciaInicio: string;
-  let vigenciaFim: string;
+  let contratos: Contrato[] = [];
+  let dataInicio: string;
+  let dataFim: string;
   let valorVT: string;
   let valorVR: string;
   let valorDiaria: string;
 
-  $: contratoId = params.id_contrato;
   $: autonomoId = params.id;
-
-  let item: Contrato = { ...CONTRATO_DEFAULT_VALUE };
+  $: diariaId = params.id_diaria;
+  $: isNovaDiaria = diariaId === 'novo';
 
   onMount(async () => {
     autonomo = await autonomoService.getByID(autonomoId);
-    cargos = await cargosService.list();
-    if (contratoId !== 'novo') {
-      item = await contratoService.getByID(contratoId);
+    contratos = await contratoService.list(autonomoId);
+    if (diariaId !== 'novo') {
+      item = await diariasService.getByID(diariaId);
     }
-    vigenciaInicio = item.vigenciaInicio.toISODate();
-    vigenciaFim = item.vigenciaFim.toISODate();
     valorVT = formatDecimal(item.valorVT) || '';
     valorVR = formatDecimal(item.valorVR) || '';
     valorDiaria = formatDecimal(item.valorDiaria) || '';
+    dataInicio = item.data.toISODate();
   });
 
   const voltar = () => pop();
 
   const salvar = async () => {
     try {
-      item.vigenciaInicio = DateTime.fromISO(vigenciaInicio);
-      item.vigenciaFim = DateTime.fromISO(vigenciaFim);
-      item.autonomo = autonomo;
-      await contratoService.salvar(item);
+      const objDataInicio = DateTime.fromISO(dataInicio);
+      const objDataFim = dataFim && DateTime.fromISO(dataFim);
+      await diariasService.salvar(item, objDataInicio, objDataFim);
       voltar();
     } catch (err) {
       console.log('Deu erro:', Error(err));
@@ -68,50 +67,28 @@
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">
       <div class="form-floating">
-        <select class="form-select" id="cargo" aria-label="Cargo" required bind:value={item.cargo}>
-          {#each cargos as cargo}
-            <option value={cargo}>{cargo.descricao}</option>
+        <select class="form-select" id="contrato" aria-label="contrato" required bind:value={item.contrato}>
+          {#each contratos as contrato}
+            <option value={contrato}>
+              Vigência: {contrato.vigenciaInicio.toLocaleString()} a {contrato.vigenciaFim.toLocaleString()}
+            </option>
           {/each}
+          {#if contratos.length === 0}
+            <option value="">Não existem contratos ativos ou cadastrados</option>
+          {/if}
         </select>
-        <label for="cargo">Cargo</label>
+        <label for="contrato">Contrato</label>
       </div>
     </div>
 
     <div class="w-100 d-none d-md-block" />
 
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          required
-          type="date"
-          class="form-control"
-          id="vigenciaInicio"
-          placeholder="vigenciaInicio"
-          bind:value={vigenciaInicio}
-        />
-        <label for="vigenciaInicio">Início da Vigência</label>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="form-floating">
-        <input
-          required
-          type="date"
-          class="form-control"
-          id="vigenciaFim"
-          placeholder="vigenciaFim"
-          bind:value={vigenciaFim}
-        />
-        <label for="vigenciaFim">Fim da Vigência</label>
-      </div>
-    </div>
-    <div class="w-100 d-none d-md-block" />
     <div class="col-md">
       <div class="form-floating">
         <input
           type="text"
-          class="form-control"
           id="valorVT"
+          class="form-control"
           placeholder="valorVT"
           value={valorVT}
           on:keyup={(e) => handleCurencyInput(e, item)}
@@ -137,7 +114,7 @@
     <div class="col-md">
       <div class="form-floating">
         <input
-          type="valorDiaria"
+          type="text"
           class="form-control"
           id="valorDiaria"
           placeholder="valorDiaria"
@@ -148,6 +125,37 @@
         <label for="valorDiaria">Valor da Diária (R$)</label>
       </div>
     </div>
+
+    <div class="w-100 d-none d-md-block" />
+
+    <div class="col-md">
+      <div class="form-floating">
+        <input
+          required
+          type="date"
+          class="form-control"
+          id="dataInicio"
+          placeholder="dataInicio"
+          bind:value={dataInicio}
+        />
+        <label for="dataInicio">
+          {#if isNovaDiaria}
+            Data de Início
+          {:else}
+            Data
+          {/if}
+        </label>
+      </div>
+    </div>
+
+    {#if isNovaDiaria}
+      <div class="col-md">
+        <div class="form-floating">
+          <input required type="date" class="form-control" id="dataFim" placeholder="dataFim" bind:value={dataFim} />
+          <label for="dataFim">Data Fim (opcional)</label>
+        </div>
+      </div>
+    {/if}
 
     <div class="w-100 d-none d-md-block" />
 

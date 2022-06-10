@@ -8,6 +8,7 @@ export interface Autonomo {
   agencia: number;
   conta: string;
   operacao?: string;
+  pix?: string;
   contratos: Contrato[];
 }
 

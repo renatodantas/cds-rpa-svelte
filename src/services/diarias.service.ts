@@ -1,30 +1,48 @@
+import type { DateTime } from 'luxon';
 import { nanoid } from 'nanoid';
-import { type Diaria } from '../models/diaria';
+import type { Diaria } from '../models/diaria';
+import { contratoService } from './contratos.service';
 
 class DiariasService {
 
-  MOCK: Diaria[] = [];
-
   async list(idAutonomo: string): Promise<Diaria[]> {
-    return this.MOCK;
+    return contratoService.MOCK.filter(c => c.autonomo.id === idAutonomo)[0].diarias;
   }
 
   async getByID(idDiaria: string): Promise<Diaria | undefined> {
-    return this.MOCK.find(item => item.id === idDiaria);
+    return contratoService.MOCK
+      .flatMap(c => c.diarias)
+      .find(item => item.id === idDiaria);
   }
 
-  async salvar(item: Diaria): Promise<void> {
-    const index = this.MOCK.findIndex(a => a.id === item.id);
-    if (index === -1) {
-      this.MOCK.push({ ...item, id: nanoid() });
+  async salvar(item: Diaria, dataInicio: DateTime, dataFim?: DateTime): Promise<void> {
+    const allDiarias = contratoService.MOCK.flatMap(c => c.diarias);
+    const contrato = contratoService.MOCK.find(c => c.id === item.contrato.id);
+    const indexDiariaExistente = allDiarias.findIndex(a => a.id === item.id);
+
+    const novasDiarias: Diaria[] = [];
+    if (dataFim) {
+      // Cria as diárias para o periodo fornecido
+      let data = dataInicio;
+      while (dataFim.diff(data, 'days').days >= 0) {
+        novasDiarias.push({ ...item, id: nanoid(), data });
+        data = data.plus({ day: 1 });
+      }
     } else {
-      this.MOCK.splice(index, 1, item);
+      item.data = dataInicio;
+    }
+
+    if (indexDiariaExistente === -1) {
+      contrato.diarias = [...contrato.diarias, ...novasDiarias];
+    } else {
+      contrato.diarias.splice(indexDiariaExistente, 1, item);
     }
   }
 
   async remover(item: Diaria): Promise<boolean> {
     if (confirm(`Confirma a exclusão da diária de ${item.data.toLocaleString()}?`)) {
-      this.MOCK = this.MOCK.filter(c => c.id !== item.id);
+      const contrato = contratoService.MOCK.find(c => c.id === item.contrato.id);
+      contrato.diarias = contrato.diarias.filter(d => d.id !== item.id);
       return true;
     }
     return false;

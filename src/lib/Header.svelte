@@ -14,6 +14,11 @@
       <li class="nav-item">
         <a href="/autonomos" use:link class="nav-link" class:active={$location.startsWith('/autonomos')}> Autônomos </a>
       </li>
+      <li class="nav-item">
+        <a href="/pagamentos" use:link class="nav-link" class:active={$location.startsWith('/pagamentos')}>
+          Pagamentos
+        </a>
+      </li>
     </ul>
   </header>
 </div>

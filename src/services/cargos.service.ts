@@ -29,7 +29,6 @@ class CargosService {
   async remover(item: Cargo): Promise<boolean> {
     if (confirm(`Confirma a exclusão de "${item.descricao}?"`)) {
       this.MOCK = this.MOCK.filter(aut => aut.id !== item.id);
-      console.log(this.MOCK);
       return true;
     }
     return false;

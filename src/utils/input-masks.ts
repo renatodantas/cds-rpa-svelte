@@ -14,5 +14,4 @@ export const handleCurencyInput = (e: Event, item: any) => {
 
   const decimalFormatado = formatDecimal(decimal);
   target.value = decimalFormatado || '';
-  console.log(target.value);
 };

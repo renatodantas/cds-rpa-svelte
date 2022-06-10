@@ -65,8 +65,17 @@
     </div>
     <div class="col-md-2">
       <div class="form-floating">
-        <input type="operacao" class="form-control" id="operacao" placeholder="operacao" bind:value={item.operacao} />
+        <input type="text" class="form-control" id="operacao" placeholder="operacao" bind:value={item.operacao} />
         <label for="operacao">Op.</label>
+      </div>
+    </div>
+
+    <div class="w-100 d-none d-md-block" />
+
+    <div class="col-md">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="pix" placeholder="pix" bind:value={item.pix} />
+        <label for="pix">PIX</label>
       </div>
     </div>
 

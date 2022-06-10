@@ -45,7 +45,7 @@
               <i class="bi-pencil" title="Editar autônomo" />
             </a>
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/contratos`} use:link>
-              <i class="bi-shield-check" title="Contratos" />
+              <i class="bi-journal-check" title="Contratos" />
             </a>
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/diarias`} use:link>
               <i class="bi-calendar-check" title="Diárias" />
