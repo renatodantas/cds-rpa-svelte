@@ -35,7 +35,7 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       {#each itens as item}
         <tr>
           <td>{item.descricao}</td>

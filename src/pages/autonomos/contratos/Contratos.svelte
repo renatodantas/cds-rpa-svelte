@@ -54,7 +54,7 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       {#each itens as item}
         <tr class:table-danger={isContratoVencido(item.vigenciaFim)}>
           <td>{item.vigenciaInicio.toLocaleString()}</td>

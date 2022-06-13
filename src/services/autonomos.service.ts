@@ -4,9 +4,9 @@ import type { Autonomo } from "../models/autonomo";
 class AutonomosService {
 
   MOCK: Autonomo[] = [
-    { id: nanoid(), nome: 'Hen', cpf: '011', banco: 'Itaú', agencia: 5429, conta: '18560', contratos: [] },
-    { id: nanoid(), nome: 'Buck', cpf: '008', banco: 'BB', agencia: 3333, conta: '8888', contratos: [] },
-    { id: nanoid(), nome: 'Chimney', cpf: '145', banco: 'Caixa', agencia: 113, conta: '9995', operacao: '013', contratos: [] },
+    { id: '1', nome: 'Hen', cpf: '011', banco: 'Itaú', agencia: 5429, conta: '18560', contratos: [] },
+    { id: '2', nome: 'Buck', cpf: '008', banco: 'BB', agencia: 3333, conta: '8888', contratos: [] },
+    { id: '3', nome: 'Chimney', cpf: '145', banco: 'Caixa', agencia: 113, conta: '9995', operacao: '013', contratos: [] },
   ]
 
   async list(): Promise<Autonomo[]> {

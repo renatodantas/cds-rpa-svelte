@@ -29,13 +29,13 @@
         <th>Nome</th>
         <th>CPF</th>
         <th style="width: 13rem" class="text-end">
-          <a class="btn btn-primary btn-sm" href="/autonomos/novo" use:link>
+          <a class="btn btn-primary btn-sm" href="#/autonomos/novo">
             <i class="bi-plus" /> Novo
           </a>
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       {#each itens as item}
         <tr>
           <td>{item.nome}</td>

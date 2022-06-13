@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
-  import { link } from 'svelte-spa-router';
   import Breadcrumb from '../../../lib/Breadcrumb.svelte';
   import type { Autonomo } from '../../../models/autonomo';
   import type { Contrato } from '../../../models/contrato';
@@ -22,15 +20,6 @@
     autonomo = await autonomoService.getByID(autonomoId);
     itens = await contratoService.list(autonomoId);
   };
-
-  const isContratoVencido = (data: DateTime): boolean => {
-    return data.startOf('day') < DateTime.now().startOf('day');
-  };
-
-  const encerrar = async (item: Contrato) => {
-    await contratoService.encerrar(item);
-    await listar();
-  };
 </script>
 
 <div class="container">
@@ -43,34 +32,34 @@
       <tr>
         <th>Início</th>
         <th>Fim</th>
+        <th>Cargo</th>
         <th>VT (R$)</th>
         <th>VR (R$)</th>
         <th>Diária (R$)</th>
-        <th>Cargo</th>
-        <th style="width: 6rem" class="text-end">
+        <!-- <th style="width: 6rem" class="text-end">
           <a class="btn btn-primary btn-sm" href={`/autonomos/${autonomoId}/pagamentos/novo`} use:link>
             <i class="bi-plus" /> Novo
           </a>
-        </th>
+        </th> -->
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       {#each itens as item}
-        <tr class:table-danger={isContratoVencido(item.vigenciaFim)}>
+        <tr>
           <td>{item.vigenciaInicio.toLocaleString()}</td>
           <td>{item.vigenciaFim.toLocaleString()}</td>
+          <td>{item.cargo.descricao}</td>
           <td>{formatDecimal(item.valorVT) || '-'}</td>
           <td>{formatDecimal(item.valorVR) || '-'}</td>
           <td>{formatDecimal(item.valorDiaria) || '-'}</td>
-          <td>{item.cargo.descricao}</td>
-          <td class="text-end">
+          <!-- <td class="text-end">
             <a class="btn btn-sm btn-link" href={`/autonomos/${autonomoId}/pagamentos/${item.id}`} use:link>
               <i class="bi-pencil" title="Editar contrato" />
             </a>
             <button class="btn btn-sm btn-link" on:click|preventDefault={() => encerrar(item)}>
               <i class="bi-shield-slash" title="Encerrar contrato" />
             </button>
-          </td>
+          </td> -->
         </tr>
       {/each}
     </tbody>
