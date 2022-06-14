@@ -14,7 +14,7 @@
       </li>
     {/each}
     <li class="breadcrumb-item active" aria-current="page">
-      <slot />
+      <strong><slot /></strong>
     </li>
   </ol>
 </nav>

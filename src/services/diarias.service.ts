@@ -1,6 +1,7 @@
 import type { DateTime } from 'luxon';
 import { nanoid } from 'nanoid';
 import type { Diaria } from '../models/diaria';
+import { autonomoService } from './autonomos.service';
 import { contratoService } from './contratos.service';
 
 class DiariasService {
@@ -15,7 +16,19 @@ class DiariasService {
       .find(item => item.id === idDiaria);
   }
 
+  async listDiariasPendentesPagamento(): Promise<Diaria[]> {
+    let diarias: Diaria[] = [];
+    for (const autonomo of autonomoService.MOCK) {
+      const newDiarias = await this.list(autonomo.id);
+      diarias = [...diarias, ...newDiarias];
+    }
+    return diarias;
+  }
+
   async salvar(item: Diaria, dataInicio: DateTime, dataFim?: DateTime): Promise<void> {
+    if (!item.valorDiaria || item.valorDiaria === 0) {
+      throw 'Valor da diária deve ser maior que R$ 0,00.';
+    }
     const allDiarias = contratoService.MOCK.flatMap(c => c.diarias);
     const contrato = contratoService.MOCK.find(c => c.id === item.contrato.id);
     const indexDiariaExistente = allDiarias.findIndex(a => a.id === item.id);

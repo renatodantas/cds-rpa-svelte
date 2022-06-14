@@ -1,23 +1,37 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Breadcrumb from '../../lib/Breadcrumb.svelte';
-  import type { Pagamento } from '../../models/pagamento';
+  import CaretIcon from '../../lib/CaretIcon.svelte';
+  import type { Pagamento, PagamentoDiaria } from '../../models/pagamento';
   import { pagamentosService } from '../../services/pagamentos.service';
   import { formatDecimal } from '../../utils/formatters';
 
   let itens: Pagamento[] = [];
+  let itensAbertos: boolean[] = [];
 
   onMount(() => listar());
 
-  async function listar() {
+  const listar = async () => {
     itens = await pagamentosService.list();
-  }
+  };
 
-  async function remover(item: Pagamento) {
+  const remover = async (item: Pagamento) => {
     if (await pagamentosService.remover(item)) {
       listar();
     }
-  }
+  };
+
+  const expandir = (index: number) => {
+    itensAbertos[index] = !itensAbertos[index];
+  };
+
+  const getTotal = ({
+    pagouValorVT,
+    pagouValorVR,
+    pagouValorDiaria,
+    diaria: { valorVT, valorVR, valorDiaria },
+  }: PagamentoDiaria) =>
+    (pagouValorVT ? valorVT : 0) + (pagouValorVR ? valorVR : 0) + (pagouValorDiaria ? valorDiaria : 0);
 </script>
 
 <div class="container">
@@ -39,45 +53,49 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      <!-- {#each itens as item} -->
-      <tr>
-        <td>
-          13/06/2022
-          <button class="btn-expandir">
-            <i class="bi bi-caret-right-fill" />
-          </button>
-        </td>
-        <td colspan="4" class="text-end">
-          {formatDecimal(230) || '-'}
-        </td>
-        <td class="text-end">
+      {#each itens as item, index}
+        <tr>
+          <td>
+            {item.data.toLocaleString()}
+            <button class="btn-expandir" on:click={() => expandir(index)}>
+              <CaretIcon isOpen={itensAbertos[index]} />
+            </button>
+          </td>
+          <td colspan="4" class="text-end">
+            {formatDecimal(item.valor) || '-'}
+          </td>
+          <td class="text-end">
+            <!-- 
           <a class="btn btn-sm btn-link" href={`#/pagamentos/${'100'}`}>
             <i class="bi-pencil" title="Editar pagamento" />
           </a>
-          <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(null)}>
-            <i class="bi-trash3" title="Remover pagamento" />
-          </button>
-        </td>
-      </tr>
+          -->
+            <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(item)}>
+              <i class="bi-trash3" title="Remover pagamento" />
+            </button>
+          </td>
+        </tr>
 
-      <!-- Linha expandida -->
-      <tr class="table-primary">
-        <td class="ps-4">Fulano</td>
-        <td class="text-end">{formatDecimal(100) || '-'}</td>
-        <td class="text-end">{formatDecimal(0.15) || '-'}</td>
-        <td class="text-end">{formatDecimal(undefined) || '-'}</td>
-        <td class="text-end">{formatDecimal(115)}</td>
-        <td />
-      </tr>
-      <tr class="table-primary">
-        <td class="ps-4">Beltrano</td>
-        <td class="text-end">{formatDecimal(100) || '-'}</td>
-        <td class="text-end">{formatDecimal(0.15) || '-'}</td>
-        <td class="text-end">{formatDecimal(undefined) || '-'}</td>
-        <td class="text-end">{formatDecimal(115)}</td>
-        <td />
-      </tr>
-      <!-- {/each} -->
+        <!-- Linha expandida -->
+        {#each item.diarias as pagtoDiaria}
+          <tr class="table-primary" class:d-none={!itensAbertos[index]}>
+            <td class="ps-4">
+              {pagtoDiaria.diaria.contrato.autonomo.nome}
+            </td>
+            <td class="text-end">
+              {pagtoDiaria.pagouValorVT ? formatDecimal(pagtoDiaria.diaria.valorVT) : '-'}
+            </td>
+            <td class="text-end">
+              {pagtoDiaria.pagouValorVR ? formatDecimal(pagtoDiaria.diaria.valorVR) : '-'}
+            </td>
+            <td class="text-end">
+              {pagtoDiaria.pagouValorDiaria ? formatDecimal(pagtoDiaria.diaria.valorDiaria) : '-'}
+            </td>
+            <td class="text-end">{formatDecimal(getTotal(pagtoDiaria))}</td>
+            <td />
+          </tr>
+        {/each}
+      {/each}
     </tbody>
   </table>
 </div>

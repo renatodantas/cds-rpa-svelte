@@ -1,4 +1,4 @@
-import type { Diaria } from '../models/diaria';
+import type { Diaria, DiariaSelecaoPagamento } from '../models/diaria';
 import type { Pagamento } from '../models/pagamento';
 import { contratoService } from './contratos.service';
 
@@ -20,28 +20,22 @@ class PagamentosService {
       .find(item => item.id === idDiaria);
   }
 
-  async salvar(): Promise<void> {
-    // const allDiarias = contratoService.MOCK.flatMap(c => c.diarias);
-    // const contrato = contratoService.MOCK.find(c => c.id === item.contrato.id);
-    // const indexDiariaExistente = allDiarias.findIndex(a => a.id === item.id);
+  async salvar(pagamento: Pagamento, diariasSelecionadas: DiariaSelecaoPagamento[]): Promise<void> {
+    const diarias = diariasSelecionadas
+      .filter(diaria => diaria.vtSelecionado || diaria.vrSelecionado || diaria.diariaSelecionada)
+      .map(diaria => ({
+        pagamento,
+        diaria,
+        pagouValorVT: diaria.vtSelecionado,
+        pagouValorVR: diaria.vrSelecionado,
+        pagouValorDiaria: diaria.diariaSelecionada
+      }));
 
-    // const novasDiarias: Diaria[] = [];
-    // if (dataFim) {
-    //   // Cria as diárias para o periodo fornecido
-    //   let data = dataInicio;
-    //   while (dataFim.diff(data, 'days').days >= 0) {
-    //     novasDiarias.push({ ...item, id: nanoid(), data });
-    //     data = data.plus({ day: 1 });
-    //   }
-    // } else {
-    //   item.data = dataInicio;
-    // }
-
-    // if (indexDiariaExistente === -1) {
-    //   contrato.diarias = [...contrato.diarias, ...novasDiarias];
-    // } else {
-    //   contrato.diarias.splice(indexDiariaExistente, 1, item);
-    // }
+    if (diarias.length === 0) {
+      throw 'O valor do pagamento deve ser superior a R$ 0,00.';
+    }
+    pagamento.diarias = diarias;
+    this.MOCK = [...this.MOCK, pagamento];
   }
 
   async remover(item: Pagamento): Promise<boolean> {

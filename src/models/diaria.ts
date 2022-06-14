@@ -11,6 +11,16 @@ export interface Diaria {
   contrato?: Contrato;
 }
 
+/**
+ * Usada na tela de seleção dos valores das diárias para pagamento.
+ */
+export interface DiariaSelecaoPagamento extends Diaria {
+  todosSelecionados: boolean;
+  vtSelecionado: boolean;
+  vrSelecionado: boolean;
+  diariaSelecionada: boolean;
+}
+
 export const DIARIA_DEFAULT_VALUE: Diaria = {
   data: DateTime.now(),
   valorDiaria: 0,

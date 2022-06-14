@@ -33,6 +33,8 @@
     contratos = await contratoService.list(autonomoId);
     if (diariaId !== 'novo') {
       item = await diariasService.getByID(diariaId);
+    } else if (contratos.length === 1) {
+      item.contrato = contratos[0];
     }
     valorVT = formatDecimal(item.valorVT) || '';
     valorVR = formatDecimal(item.valorVR) || '';
@@ -45,11 +47,11 @@
   const salvar = async () => {
     try {
       const objDataInicio = DateTime.fromISO(dataInicio);
-      const objDataFim = dataFim && DateTime.fromISO(dataFim);
+      const objDataFim = DateTime.fromISO(dataFim);
       await diariasService.salvar(item, objDataInicio, objDataFim);
       voltar();
     } catch (err) {
-      console.log('Deu erro:', Error(err));
+      alert(err);
     }
   };
 </script>
@@ -119,6 +121,7 @@
           id="valorDiaria"
           placeholder="valorDiaria"
           value={valorDiaria}
+          required
           on:keyup={(e) => handleCurencyInput(e, item)}
           on:focus={(e) => handleCurencyInput(e, item)}
         />
@@ -152,7 +155,7 @@
       <div class="col-md">
         <div class="form-floating">
           <input required type="date" class="form-control" id="dataFim" placeholder="dataFim" bind:value={dataFim} />
-          <label for="dataFim">Data Fim (opcional)</label>
+          <label for="dataFim">Data Fim</label>
         </div>
       </div>
     {/if}

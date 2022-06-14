@@ -53,9 +53,9 @@
       {#each itens as item}
         <tr>
           <td>{item.data.toLocaleString()}</td>
-          <td class="text-end">{formatDecimal(item.valorVT)}</td>
-          <td class="text-end">{formatDecimal(item.valorVR)}</td>
-          <td class="text-end">{formatDecimal(item.valorDiaria)}</td>
+          <td class="text-end">{formatDecimal(item.valorVT) || '-'}</td>
+          <td class="text-end">{formatDecimal(item.valorVR) || '-'}</td>
+          <td class="text-end">{formatDecimal(item.valorDiaria) || '-'}</td>
           <td class="text-end">
             <a class="btn btn-sm btn-link" href={`#/autonomos/${item.id}`}>
               <i class="bi-pencil" title="Editar autônomo" />

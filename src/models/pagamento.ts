@@ -1,4 +1,4 @@
-import type { DateTime } from "luxon";
+import { DateTime } from "luxon";
 import type { Diaria } from "./diaria";
 
 export interface Pagamento {
@@ -14,4 +14,10 @@ export interface PagamentoDiaria {
   pagouValorVT: boolean;
   pagouValorVR: boolean;
   pagouValorDiaria: boolean;
+}
+
+export const PAGAMENTO_DEFAULT_VALUE: Pagamento = {
+  data: DateTime.now(),
+  valor: 0,
+  diarias: []
 }

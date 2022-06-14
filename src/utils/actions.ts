@@ -20,7 +20,6 @@ export const stringToDecimal = (node: HTMLInputElement, { obj, attr }: StringToN
 
     // Devolvendo o valor formatado ao input
     node.value = formatDecimal(numberValue);
-    console.log('Num. convertido e despachando:', formatDecimal(numberValue));
   }
 
   const events = ['keyup']
