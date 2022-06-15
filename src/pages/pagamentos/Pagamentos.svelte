@@ -40,7 +40,8 @@
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th>Data</th>
+        <th>Data do Pagto.</th>
+        <th>Data da Diária</th>
         <th>VT (R$)</th>
         <th>VR (R$)</th>
         <th>Diária (R$)</th>
@@ -61,7 +62,7 @@
               <CaretIcon isOpen={itensAbertos[index]} />
             </button>
           </td>
-          <td colspan="4" class="text-end">
+          <td colspan="5" class="text-end">
             {formatDecimal(item.valor) || '-'}
           </td>
           <td class="text-end">
@@ -81,6 +82,9 @@
           <tr class="table-primary" class:d-none={!itensAbertos[index]}>
             <td class="ps-4">
               {pagtoDiaria.diaria.contrato.autonomo.nome}
+            </td>
+            <td>
+              {pagtoDiaria.diaria.data.toLocaleString()}
             </td>
             <td class="text-end">
               {pagtoDiaria.pagouValorVT ? formatDecimal(pagtoDiaria.diaria.valorVT) : '-'}

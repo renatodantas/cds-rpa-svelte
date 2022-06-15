@@ -42,7 +42,7 @@
         <th>VT (R$)</th>
         <th>VR (R$)</th>
         <th>Diária (R$)</th>
-        <th style="width: 13rem" class="text-end">
+        <th style="width: 6rem" class="text-end">
           <a class="btn btn-primary btn-sm" href={`#/autonomos/${autonomoId}/diarias/novo`}>
             <i class="bi-plus" /> Nova
           </a>
@@ -57,20 +57,11 @@
           <td class="text-end">{formatDecimal(item.valorVR) || '-'}</td>
           <td class="text-end">{formatDecimal(item.valorDiaria) || '-'}</td>
           <td class="text-end">
-            <a class="btn btn-sm btn-link" href={`#/autonomos/${item.id}`}>
-              <i class="bi-pencil" title="Editar autônomo" />
-            </a>
-            <a class="btn btn-sm btn-link" href={`#/autonomos/${item.id}/contratos`}>
-              <i class="bi-shield-check" title="Contratos" />
-            </a>
-            <a class="btn btn-sm btn-link" href={`/#autonomos/${item.id}/diarias`}>
-              <i class="bi-calendar-check" title="Diárias" />
-            </a>
-            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/pagamentos`}>
-              <i class="bi-cash-stack" title="Pagamentos" />
+            <a class="btn btn-sm btn-link" href={`#/autonomos/${autonomoId}/diarias/${item.id}`}>
+              <i class="bi-pencil" title="Editar diária" />
             </a>
             <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(item)}>
-              <i class="bi-trash3" title="Excluir autônomo" />
+              <i class="bi-trash3" title="Excluir diária" />
             </button>
           </td>
         </tr>

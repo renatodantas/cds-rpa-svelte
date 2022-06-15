@@ -40,6 +40,7 @@
     valorVR = formatDecimal(item.valorVR) || '';
     valorDiaria = formatDecimal(item.valorDiaria) || '';
     dataInicio = item.data.toISODate();
+    dataFim = item.data.toISODate();
   });
 
   const voltar = () => pop();
@@ -47,7 +48,7 @@
   const salvar = async () => {
     try {
       const objDataInicio = DateTime.fromISO(dataInicio);
-      const objDataFim = DateTime.fromISO(dataFim);
+      const objDataFim = isNovaDiaria ? DateTime.fromISO(dataFim) : null;
       await diariasService.salvar(item, objDataInicio, objDataFim);
       voltar();
     } catch (err) {
@@ -63,7 +64,7 @@
       { label: `Diárias de ${autonomo?.nome}`, link: `#/autonomos/${autonomoId}/diarias` },
     ]}
   >
-    Editar Diária
+    {isNovaDiaria ? 'Nova' : 'Editar'} Diária
   </Breadcrumb>
 
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
