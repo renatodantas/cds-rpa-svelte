@@ -134,16 +134,17 @@
             <td>{diaria.contrato.autonomo.nome}</td>
             <td>{diaria.data.setLocale('pt-BR').toFormat('dd/LL/yyyy - cccc').replace('-feira', '')}</td>
             <td class="text-end" class:table-primary={diaria.vtSelecionado}>
-              {formatDecimal(diaria.valorVT)}
+              {formatDecimal(diaria.valorVT) || '-'}
               <input
                 type="checkbox"
                 bind:checked={diaria.vtSelecionado}
                 on:change={() => handleSelecionarColuna(index)}
+                disabled={!diaria.valorVT}
               />
             </td>
             <td class="text-end" class:table-primary={diaria.vrSelecionado}>
-              {formatDecimal(diaria.valorVR)}
-              <input type="checkbox" bind:checked={diaria.vrSelecionado} />
+              {formatDecimal(diaria.valorVR) || '-'}
+              <input type="checkbox" bind:checked={diaria.vrSelecionado} disabled={!diaria.valorVR} />
             </td>
             <td class="text-end" class:table-primary={diaria.diariaSelecionada}>
               {formatDecimal(diaria.valorDiaria)}
@@ -155,13 +156,13 @@
       <tfoot>
         <tr>
           <td colspan="7" class="text-end">
-            Total do Pagamento: R$ {formatDecimal(valorTotal)}
+            Total do Pagamento: R$ {formatDecimal(valorTotal) || '0,00'}
           </td>
         </tr>
       </tfoot>
     </table>
 
-    <div class="col-md">
+    <div class="col-md text-end">
       <button type="submit" class="btn btn-primary shadow-sm mx-2">Salvar</button>
       <button type="button" class="btn btn-light shadow-sm" on:click={voltar}>Cancelar</button>
     </div>
