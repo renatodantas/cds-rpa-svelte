@@ -37,7 +37,7 @@
 <div class="container">
   <Breadcrumb>Pagamentos</Breadcrumb>
 
-  <table class="table table-bordered table-striped">
+  <table class="table table-bordered">
     <thead>
       <tr>
         <th>Data do Pagto.</th>

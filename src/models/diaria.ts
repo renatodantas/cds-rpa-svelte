@@ -15,7 +15,7 @@ export interface Diaria {
  * Usada na tela de seleção dos valores das diárias para pagamento.
  */
 export interface DiariaSelecaoPagamento extends Diaria {
-  todosSelecionados: boolean;
+  tudoSelecionado: boolean;
   vtSelecionado: boolean;
   vrSelecionado: boolean;
   diariaSelecionada: boolean;

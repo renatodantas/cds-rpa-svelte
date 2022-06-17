@@ -23,7 +23,7 @@
       vtSelecionado: false,
       vrSelecionado: false,
       diariaSelecionada: false,
-      todosSelecionados: false,
+      tudoSelecionado: false,
     }));
   });
 
@@ -43,25 +43,29 @@
     .reduce((previous, current) => previous + current, 0);
 
   const handleSelecionarColuna = (index: number) => {
-    diarias[index].todosSelecionados =
-      diarias[index].vtSelecionado && diarias[index].vrSelecionado && diarias[index].diariaSelecionada;
+    const isVTSelecionado = diarias[index].vtSelecionado || diarias[index].disableVT;
+    const isVRSelecionado = diarias[index].vrSelecionado || diarias[index].disableVR;
+    const isDiariaSelecionada = diarias[index].diariaSelecionada || diarias[index].disableDiaria;
+    diarias[index].tudoSelecionado = isVTSelecionado && isVRSelecionado && isDiariaSelecionada;
   };
 
   const handleSelecionarLinha = (index: number) => {
-    const selecao = diarias[index].todosSelecionados;
-    diarias[index].vrSelecionado = selecao;
-    diarias[index].vtSelecionado = selecao;
-    diarias[index].diariaSelecionada = selecao;
+    const selecao = diarias[index].tudoSelecionado;
+    diarias[index].vtSelecionado = selecao && !diarias[index].disableVT;
+    diarias[index].vrSelecionado = selecao && !diarias[index].disableVR;
+    diarias[index].diariaSelecionada = selecao && !diarias[index].disableDiaria;
+    selecionarTodos = diarias.every((d) => d.tudoSelecionado);
   };
 
   const handleSelecionarTodos = () => {
     diarias = diarias.map((d) => ({
       ...d,
-      todosSelecionados: selecionarTodos,
-      vrSelecionado: selecionarTodos,
-      vtSelecionado: selecionarTodos,
-      diariaSelecionada: selecionarTodos,
+      tudoSelecionado: selecionarTodos,
+      vtSelecionado: selecionarTodos && !d.disableVT,
+      vrSelecionado: selecionarTodos && !d.disableVR,
+      diariaSelecionada: selecionarTodos && !d.disableDiaria,
     }));
+    console.log('diarias: ', diarias);
   };
 
   const salvar = async () => {
@@ -123,11 +127,11 @@
       </thead>
       <tbody class="table-group-divider">
         {#each diarias as diaria, index}
-          <tr class:table-primary={diaria.todosSelecionados} class:d-none={exibirLinha(diaria)}>
+          <tr class:table-primary={diaria.tudoSelecionado} class:d-none={exibirLinha(diaria)}>
             <td>
               <input
                 type="checkbox"
-                bind:checked={diaria.todosSelecionados}
+                bind:checked={diaria.tudoSelecionado}
                 on:change={() => handleSelecionarLinha(index)}
               />
             </td>
@@ -153,6 +157,7 @@
                   class="form-check-input"
                   for={`valorVR-${index}`}
                   bind:checked={diaria.vrSelecionado}
+                  on:change={() => handleSelecionarColuna(index)}
                   disabled={!diaria.valorVR || diaria.disableVR}
                 />
                 <label class="form-check-label" for={`valorVR-${index}`}>
@@ -167,6 +172,7 @@
                   class="form-check-input"
                   id={`valorDiaria-${index}`}
                   bind:checked={diaria.diariaSelecionada}
+                  on:change={() => handleSelecionarColuna(index)}
                   disabled={diaria.disableDiaria}
                 />
                 <label class="form-check-label" for={`valorDiaria-${index}`}>
