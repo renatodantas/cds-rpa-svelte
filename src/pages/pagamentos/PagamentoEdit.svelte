@@ -134,21 +134,45 @@
             <td>{diaria.contrato.autonomo.nome}</td>
             <td>{diaria.data.setLocale('pt-BR').toFormat('dd/LL/yyyy - cccc').replace('-feira', '')}</td>
             <td class="text-end" class:table-primary={diaria.vtSelecionado}>
-              {formatDecimal(diaria.valorVT) || '-'}
-              <input
-                type="checkbox"
-                bind:checked={diaria.vtSelecionado}
-                on:change={() => handleSelecionarColuna(index)}
-                disabled={!diaria.valorVT}
-              />
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id={`valorVT-${index}`}
+                  bind:checked={diaria.vtSelecionado}
+                  on:change={() => handleSelecionarColuna(index)}
+                  disabled={!diaria.valorVT || diaria.disableVT}
+                />
+                <label class="form-check-label" for={`valorVT-${index}`}>{formatDecimal(diaria.valorVT) || '-'}</label>
+              </div>
             </td>
             <td class="text-end" class:table-primary={diaria.vrSelecionado}>
-              {formatDecimal(diaria.valorVR) || '-'}
-              <input type="checkbox" bind:checked={diaria.vrSelecionado} disabled={!diaria.valorVR} />
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  for={`valorVR-${index}`}
+                  bind:checked={diaria.vrSelecionado}
+                  disabled={!diaria.valorVR || diaria.disableVR}
+                />
+                <label class="form-check-label" for={`valorVR-${index}`}>
+                  {formatDecimal(diaria.valorVR) || '-'}
+                </label>
+              </div>
             </td>
             <td class="text-end" class:table-primary={diaria.diariaSelecionada}>
-              {formatDecimal(diaria.valorDiaria)}
-              <input type="checkbox" bind:checked={diaria.diariaSelecionada} />
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id={`valorDiaria-${index}`}
+                  bind:checked={diaria.diariaSelecionada}
+                  disabled={diaria.disableDiaria}
+                />
+                <label class="form-check-label" for={`valorDiaria-${index}`}>
+                  {formatDecimal(diaria.valorDiaria)}
+                </label>
+              </div>
             </td>
           </tr>
         {/each}
@@ -163,8 +187,8 @@
     </table>
 
     <div class="col-md text-end">
-      <button type="submit" class="btn btn-primary shadow-sm mx-2">Salvar</button>
       <button type="button" class="btn btn-light shadow-sm" on:click={voltar}>Cancelar</button>
+      <button type="submit" class="btn btn-primary shadow-sm mx-2">Salvar</button>
     </div>
   </form>
 </div>

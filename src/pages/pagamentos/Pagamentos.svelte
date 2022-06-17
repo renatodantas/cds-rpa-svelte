@@ -7,7 +7,7 @@
   import { formatDecimal } from '../../utils/formatters';
 
   let itens: Pagamento[] = [];
-  let itensAbertos: boolean[] = [];
+  let itensFechados: boolean[] = [];
 
   onMount(() => listar());
 
@@ -22,7 +22,7 @@
   };
 
   const expandir = (index: number) => {
-    itensAbertos[index] = !itensAbertos[index];
+    itensFechados[index] = !itensFechados[index];
   };
 
   const getTotal = ({
@@ -59,7 +59,7 @@
           <td>
             {item.data.toLocaleString()}
             <button class="btn-expandir" on:click={() => expandir(index)}>
-              <CaretIcon isOpen={itensAbertos[index]} />
+              <CaretIcon isClosed={itensFechados[index]} />
             </button>
           </td>
           <td colspan="5" class="text-end">
@@ -79,7 +79,7 @@
 
         <!-- Linha expandida -->
         {#each item.diarias as pagtoDiaria}
-          <tr class="table-primary" class:d-none={!itensAbertos[index]}>
+          <tr class="table-warning" class:d-none={itensFechados[index]}>
             <td class="ps-4">
               {pagtoDiaria.diaria.contrato.autonomo.nome}
             </td>

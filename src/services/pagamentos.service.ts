@@ -11,7 +11,9 @@ class PagamentosService {
   }
 
   async listByAutonomo(idAutonomo: string): Promise<Pagamento[]> {
-    return this.MOCK.filter(p => p.diarias.some(d => d.diaria.contrato.autonomo.id === idAutonomo));
+    return this.MOCK
+      .filter(p => p.diarias.some(d => d.diaria.contrato.autonomo.id === idAutonomo))
+      .sort((a, b) => a.data.toMillis() - b.data.toMillis());
   }
 
   async getByID(idDiaria: string): Promise<Diaria | undefined> {
@@ -21,6 +23,9 @@ class PagamentosService {
   }
 
   async salvar(pagamento: Pagamento, diariasSelecionadas: DiariaSelecaoPagamento[]): Promise<void> {
+    // TODO: corrigir:
+    // - seleção de todos (não permitir selecionar os disableds)
+    // - exclusão de pagamento (está exlcuindo todos)
     const diarias = diariasSelecionadas
       .filter(diaria => diaria.vtSelecionado || diaria.vrSelecionado || diaria.diariaSelecionada)
       .map(diaria => ({

@@ -1,8 +1,9 @@
 import type { DateTime } from 'luxon';
 import { nanoid } from 'nanoid';
-import type { Diaria } from '../models/diaria';
+import type { Diaria, DiariaSelecaoPagamento } from '../models/diaria';
 import { autonomoService } from './autonomos.service';
 import { contratoService } from './contratos.service';
+import { pagamentosService } from './pagamentos.service';
 
 class DiariasService {
 
@@ -16,13 +17,37 @@ class DiariasService {
       .find(item => item.id === idDiaria);
   }
 
-  async listDiariasPendentesPagamento(): Promise<Diaria[]> {
-    let diarias: Diaria[] = [];
+  async listDiariasPendentesPagamento(): Promise<DiariaSelecaoPagamento[]> {
+    // 1 - Recuperar todas as diárias dos autônomos;
+    let todasAsDiarias: DiariaSelecaoPagamento[] = [];
     for (const autonomo of autonomoService.MOCK) {
-      const newDiarias = await this.list(autonomo.id);
-      diarias = [...diarias, ...newDiarias];
+      const newDiarias = (await this.list(autonomo.id)).map(d => ({
+        ...d,
+        vtSelecionado: false,
+        vrSelecionado: false,
+        diariaSelecionada: false,
+        todosSelecionados: false,
+      }));
+      todasAsDiarias = [...todasAsDiarias, ...newDiarias];
     }
-    return diarias;
+
+    // 2 - Remover as diárias totalmente pagas
+    const todasAsDiariasComPagamento = pagamentosService.MOCK
+      .flatMap(p => p.diarias);
+    const todasAsDiariasQuitadas = todasAsDiariasComPagamento
+      .filter(pd => pd.pagouValorDiaria && pd.pagouValorVR && pd.pagouValorVT);
+    const idDiariasQuitadas = todasAsDiariasQuitadas.flatMap(pd => pd.diaria.id);
+    const diariasParcialmenteQuitadas = todasAsDiarias.filter(d => !idDiariasQuitadas.includes(d.id));
+
+    // 3 - Marcar como "disable" os valores que ainda não foram pagos
+    const diariasParcialmenteQuitadasEConfiguradas = diariasParcialmenteQuitadas.map(d => ({
+      ...d,
+      disableVT: todasAsDiariasComPagamento.filter(dp => dp.diaria.id === d.id).some(dp => dp.pagouValorVT),
+      disableVR: todasAsDiariasComPagamento.filter(dp => dp.diaria.id === d.id).some(dp => dp.pagouValorVR),
+      disableDiaria: todasAsDiariasComPagamento.filter(dp => dp.diaria.id === d.id).some(dp => dp.pagouValorDiaria)
+    }));
+
+    return diariasParcialmenteQuitadasEConfiguradas;
   }
 
   async salvar(item: Diaria, dataInicio: DateTime, dataFim?: DateTime): Promise<void> {

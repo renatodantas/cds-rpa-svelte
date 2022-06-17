@@ -19,6 +19,9 @@ export interface DiariaSelecaoPagamento extends Diaria {
   vtSelecionado: boolean;
   vrSelecionado: boolean;
   diariaSelecionada: boolean;
+  disableVT?: boolean;
+  disableVR?: boolean;
+  disableDiaria?: boolean;
 }
 
 export const DIARIA_DEFAULT_VALUE: Diaria = {
