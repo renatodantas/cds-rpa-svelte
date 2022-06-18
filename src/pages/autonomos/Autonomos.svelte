@@ -50,9 +50,11 @@
             <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/diarias`} use:link>
               <i class="bi-calendar-check" title="Diárias" />
             </a>
-            <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/pagamentos`} use:link>
-              <i class="bi-cash-stack" title="Pagamentos" />
-            </a>
+            <!--
+              <a class="btn btn-sm btn-link" href={`/autonomos/${item.id}/pagamentos`} use:link>
+                <i class="bi-cash-stack" title="Pagamentos" />
+              </a>
+            -->
             <button class="btn btn-sm btn-link" on:click|preventDefault={() => remover(item)}>
               <i class="bi-trash3" title="Excluir autônomo" />
             </button>

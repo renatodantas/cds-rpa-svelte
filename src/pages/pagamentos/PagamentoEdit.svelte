@@ -65,7 +65,6 @@
       vrSelecionado: selecionarTodos && !d.disableVR,
       diariaSelecionada: selecionarTodos && !d.disableDiaria,
     }));
-    console.log('diarias: ', diarias);
   };
 
   const salvar = async () => {

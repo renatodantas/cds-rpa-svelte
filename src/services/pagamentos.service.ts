@@ -33,7 +33,6 @@ class PagamentosService {
         pagouValorVR: diaria.vrSelecionado,
         pagouValorDiaria: diaria.diariaSelecionada
       }));
-    console.log('diarias salvas:', diarias);
 
     if (diarias.length === 0) {
       throw 'O valor do pagamento deve ser superior a R$ 0,00.';

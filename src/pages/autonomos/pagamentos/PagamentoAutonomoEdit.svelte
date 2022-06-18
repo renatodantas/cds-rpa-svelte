@@ -50,7 +50,7 @@
       await contratoService.salvar(item);
       voltar();
     } catch (err) {
-      console.log('Deu erro:', Error(err));
+      alert(JSON.stringify(err));
     }
   };
 </script>

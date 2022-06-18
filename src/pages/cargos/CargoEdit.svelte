@@ -23,7 +23,7 @@
       await cargosService.salvar(item);
       pop();
     } catch (err) {
-      console.log('Deu erro:', Error(err));
+      alert(JSON.stringify(err));
     }
   };
 </script>

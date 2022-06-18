@@ -30,7 +30,6 @@ class DiariasService {
       }));
       todasAsDiarias = [...todasAsDiarias, ...newDiarias];
     }
-    console.log('todasAsDiarias: ', todasAsDiarias);
 
     // 2 - Remover as diárias totalmente pagas
     const todasAsDiariasComPagamento = pagamentosService.MOCK.flatMap(p => p.diarias);
@@ -48,7 +47,6 @@ class DiariasService {
         if (pagtoDiaria.pagouValorDiaria) infoPagamento.diaria = true;
       }
     }
-    console.log('lasDiarias: ', lasDiarias);
 
     const idDiariasQuitadas: string[] = [];
     lasDiarias.forEach((controle, idDiaria) => {
@@ -57,7 +55,6 @@ class DiariasService {
     });
 
     const diariasParcialmenteQuitadas = todasAsDiarias.filter(d => !idDiariasQuitadas.includes(d.id));
-    console.log('diariasParcialmenteQuitadas: ', diariasParcialmenteQuitadas);
 
     // 3 - Marcar como "disable" os valores que ainda não foram pagos
     const diariasParcialmenteQuitadasEConfiguradas = diariasParcialmenteQuitadas.map(d => ({
@@ -66,8 +63,6 @@ class DiariasService {
       disableVR: todasAsDiariasComPagamento.filter(dp => dp.diaria.id === d.id).some(dp => dp.pagouValorVR),
       disableDiaria: todasAsDiariasComPagamento.filter(dp => dp.diaria.id === d.id).some(dp => dp.pagouValorDiaria)
     }));
-
-    console.log('diariasParcialmenteQuitadasEConfiguradas: ', diariasParcialmenteQuitadasEConfiguradas);
     return diariasParcialmenteQuitadasEConfiguradas;
   }
 

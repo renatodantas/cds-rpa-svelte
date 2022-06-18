@@ -70,7 +70,14 @@
   <form class="row g-2 w-50 mx-auto" on:submit|preventDefault={salvar}>
     <div class="col-md">
       <div class="form-floating">
-        <select class="form-select" id="contrato" aria-label="contrato" required bind:value={item.contrato}>
+        <select
+          class="form-select"
+          id="contrato"
+          aria-label="contrato"
+          required
+          disabled={!isNovaDiaria}
+          bind:value={item.contrato}
+        >
           {#each contratos as contrato}
             <option value={contrato}>
               Vigência: {contrato.vigenciaInicio.toLocaleString()} a {contrato.vigenciaFim.toLocaleString()}
@@ -94,6 +101,7 @@
           class="form-control"
           placeholder="valorVT"
           value={valorVT}
+          disabled={!isNovaDiaria}
           on:keyup={(e) => handleCurencyInput(e, item)}
           on:focus={(e) => handleCurencyInput(e, item)}
         />
@@ -108,6 +116,7 @@
           id="valorVR"
           placeholder="valorVR"
           value={valorVR}
+          disabled={!isNovaDiaria}
           on:keyup={(e) => handleCurencyInput(e, item)}
           on:focus={(e) => handleCurencyInput(e, item)}
         />
@@ -122,6 +131,7 @@
           id="valorDiaria"
           placeholder="valorDiaria"
           value={valorDiaria}
+          disabled={!isNovaDiaria}
           required
           on:keyup={(e) => handleCurencyInput(e, item)}
           on:focus={(e) => handleCurencyInput(e, item)}
