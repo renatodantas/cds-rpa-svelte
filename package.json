@@ -23,6 +23,7 @@
   "dependencies": {
     "bootstrap": "^5.2.0-beta1",
     "bootstrap-icons": "^1.8.3",
+    "firebase": "^9.8.3",
     "luxon": "^2.4.0",
     "nanoid": "^4.0.0",
     "svelte-spa-router": "^3.2.0"
