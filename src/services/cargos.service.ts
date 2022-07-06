@@ -1,34 +1,35 @@
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore/lite';
 import { nanoid } from 'nanoid';
 import type { Cargo } from '../models/cargo';
+import { db } from './firebase.service';
 
 class CargosService {
 
-  MOCK: Cargo[] = [
-    { id: nanoid(), descricao: 'Auxiliar de motorista', centroCustoCodigo: '011', centroCustoDescricao: 'Transporte' },
-    { id: nanoid(), descricao: 'Auxiliar de logística', centroCustoCodigo: '008', centroCustoDescricao: 'Logística' },
-    { id: nanoid(), descricao: 'Motorista', centroCustoCodigo: '145', centroCustoDescricao: 'Transporte' },
-  ]
-
   async list(): Promise<Cargo[]> {
-    return this.MOCK.sort((a, b) => a.descricao.localeCompare(b.descricao));
+    // return this.MOCK.sort((a, b) => a.descricao.localeCompare(b.descricao));
+    const cargosCollection = collection(db, 'cargos');
+    const cargoSnapshot = await getDocs(cargosCollection);
+    const cargoList = cargoSnapshot.docs.map(doc => doc.data()) as Cargo[];
+    return cargoList;
   }
 
   async getByID(id: string): Promise<Cargo | undefined> {
-    return this.MOCK.find(item => item.id === id);
+    const docSnap = await getDoc(doc(db, "cargos", id));
+    return docSnap.data() as Cargo;
   }
 
   async salvar(item: Cargo): Promise<void> {
-    const index = this.MOCK.findIndex(a => a.id === item.id);
-    if (index === -1) {
-      this.MOCK.push({ ...item, id: nanoid() });
-    } else {
-      this.MOCK.splice(index, 1, item);
+    if (!item.id) {
+      item.id = nanoid();
     }
+
+    const cargoRef = doc(db, "cargos", item.id);
+    await setDoc(cargoRef, { ...item });
   }
 
   async remover(item: Cargo): Promise<boolean> {
     if (confirm(`Confirma a exclusão de "${item.descricao}?"`)) {
-      this.MOCK = this.MOCK.filter(aut => aut.id !== item.id);
+      await deleteDoc(doc(db, "cargos", item.id));
       return true;
     }
     return false;
