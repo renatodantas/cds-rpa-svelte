@@ -5,16 +5,16 @@ import { db } from './firebase.service';
 
 class CargosService {
 
+  private readonly COLLECTION = 'cargos';
+
   async list(): Promise<Cargo[]> {
-    // return this.MOCK.sort((a, b) => a.descricao.localeCompare(b.descricao));
-    const cargosCollection = collection(db, 'cargos');
-    const cargoSnapshot = await getDocs(cargosCollection);
-    const cargoList = cargoSnapshot.docs.map(doc => doc.data()) as Cargo[];
-    return cargoList;
+    const itemsCollection = collection(db, this.COLLECTION);
+    const snapshot = await getDocs(itemsCollection);
+    return snapshot.docs.map(doc => doc.data()) as Cargo[];
   }
 
   async getByID(id: string): Promise<Cargo | undefined> {
-    const docSnap = await getDoc(doc(db, "cargos", id));
+    const docSnap = await getDoc(doc(db, this.COLLECTION, id));
     return docSnap.data() as Cargo;
   }
 
@@ -23,13 +23,13 @@ class CargosService {
       item.id = nanoid();
     }
 
-    const cargoRef = doc(db, "cargos", item.id);
+    const cargoRef = doc(db, this.COLLECTION, item.id);
     await setDoc(cargoRef, { ...item });
   }
 
   async remover(item: Cargo): Promise<boolean> {
     if (confirm(`Confirma a exclusão de "${item.descricao}?"`)) {
-      await deleteDoc(doc(db, "cargos", item.id));
+      await deleteDoc(doc(db, this.COLLECTION, item.id));
       return true;
     }
     return false;
