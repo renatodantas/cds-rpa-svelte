@@ -6,8 +6,9 @@
   import type { Autonomo } from '../../../models/autonomo';
   import type { Contrato } from '../../../models/contrato';
   import { autonomoService } from '../../../services/autonomos.service';
+  import { cargosService } from '../../../services/cargos.service';
   import { contratoService } from '../../../services/contratos.service';
-  import { formatDecimal } from '../../../utils/formatters';
+  import { formatDate, formatDecimal } from '../../../utils/formatters';
 
   // Path params
   export let params: Record<string, string>;
@@ -23,9 +24,8 @@
     itens = await contratoService.list(autonomoId);
   };
 
-  const isContratoVencido = (data: DateTime): boolean => {
-    return data.startOf('day') < DateTime.now().startOf('day');
-  };
+  const isContratoVencido = (data: string): boolean =>
+    DateTime.fromISO(data).startOf('day') < DateTime.now().startOf('day');
 
   const encerrar = async (item: Contrato) => {
     await contratoService.encerrar(item);
@@ -57,12 +57,18 @@
     <tbody class="table-group-divider">
       {#each itens as item}
         <tr class:table-danger={isContratoVencido(item.vigenciaFim)}>
-          <td>{item.vigenciaInicio.toLocaleString()}</td>
-          <td>{item.vigenciaFim.toLocaleString()}</td>
+          <td>{formatDate(item.vigenciaInicio)}</td>
+          <td>{formatDate(item.vigenciaFim)}</td>
           <td class="text-end">{formatDecimal(item.valorVT) || '-'}</td>
           <td class="text-end">{formatDecimal(item.valorVR) || '-'}</td>
           <td class="text-end">{formatDecimal(item.valorDiaria) || '-'}</td>
-          <td>{item.cargo.descricao}</td>
+          <td>
+            {#await cargosService.getByID(item.idCargo)}
+              Carregando...
+            {:then cargo}
+              {cargo.descricao}
+            {/await}
+          </td>
           <td class="text-end">
             <a class="btn btn-sm btn-link" href={`/autonomos/${autonomoId}/contratos/${item.id}`} use:link>
               <i class="bi-pencil" title="Editar contrato" />

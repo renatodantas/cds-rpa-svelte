@@ -1,36 +1,43 @@
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore/lite';
 import { nanoid } from 'nanoid';
-import { CONTRATO_DEFAULT_VALUE, type Contrato } from '../models/contrato';
-import { autonomoService } from './autonomos.service';
-import { cargosService } from './cargos.service';
+import type { Contrato } from '../models/contrato';
+import { db } from './firebase.service';
 
 class ContratosService {
 
-  MOCK: Contrato[] = autonomoService.MOCK.map((autonomo, index) =>
-    ({ ...CONTRATO_DEFAULT_VALUE, id: nanoid(), autonomo, cargo: cargosService.MOCK[index] })
-  )
+  private readonly COLLECTION = 'contratos';
 
   async list(idAutonomo: string): Promise<Contrato[]> {
-    return this.MOCK
-      .filter(c => c.autonomo.id === idAutonomo)
-      .filter(c => !c.encerradoManualmente);
+    //const itemsCollection = collection(db, `autonomos/${idAutonomo}/${this.COLLECTION}`);
+    const querySnapshot = query(
+      collection(db, this.COLLECTION),
+      where('idAutonomo', '==', idAutonomo),
+      where('encerradoManualmente', '==', false));
+    const snapshot = await getDocs(querySnapshot);
+    return snapshot.docs.map(doc => doc.data()) as Contrato[];
   }
 
   async getByID(idContrato: string): Promise<Contrato | undefined> {
-    return this.MOCK.find(item => item.id === idContrato);
+    const docSnap = await getDoc(doc(db, this.COLLECTION, idContrato));
+    return docSnap.data() as Contrato;
   }
 
   async salvar(item: Contrato): Promise<void> {
-    const index = this.MOCK.findIndex(a => a.id === item.id);
-    if (index === -1) {
-      this.MOCK.push({ ...item, id: nanoid() });
-    } else {
-      this.MOCK.splice(index, 1, item);
+    if (!item.id) {
+      item.id = nanoid();
+    }
+
+    const itemRef = doc(db, this.COLLECTION, item.id);
+    try {
+      await setDoc(itemRef, item);
+    } catch (err) {
+      console.log(Error(err));
     }
   }
 
   async encerrar(item: Contrato): Promise<void> {
     if (confirm(`Confirma o encerramento manual do contrato?`)) {
-      this.MOCK.find(c => c.id === item.id).encerradoManualmente = true;
+      this.salvar({ ...item, encerradoManualmente: true });
     }
   }
 }

@@ -23,8 +23,8 @@ class AutonomosService {
       item.id = nanoid();
     }
 
-    const cargoRef = doc(db, this.COLLECTION, item.id);
-    await setDoc(cargoRef, { ...item });
+    const itemRef = doc(db, this.COLLECTION, item.id);
+    await setDoc(itemRef, { ...item });
   }
 
   async remover(item: Autonomo): Promise<boolean> {

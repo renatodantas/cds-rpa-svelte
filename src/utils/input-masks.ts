@@ -5,6 +5,7 @@ import { formatDecimal } from "./formatters";
  * Formata o input para renderizar 2 casas decimais.
  * 
  * @param e evento do input
+ * @param item objeto com a propriedade a ser atualizada
  */
 export const handleCurencyInput = (e: Event, item: any) => {
   const target = e.target as HTMLInputElement;
