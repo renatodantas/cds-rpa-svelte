@@ -8,7 +8,6 @@ class ContratosService {
   private readonly COLLECTION = 'contratos';
 
   async list(idAutonomo: string): Promise<Contrato[]> {
-    //const itemsCollection = collection(db, `autonomos/${idAutonomo}/${this.COLLECTION}`);
     const querySnapshot = query(
       collection(db, this.COLLECTION),
       where('idAutonomo', '==', idAutonomo),

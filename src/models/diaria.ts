@@ -8,7 +8,8 @@ export interface Diaria {
   valorVR?: number; // (busca do contrato)
   valorDiaria: number; // (busca do contrato)
   observacao?: string; // (justificar alteração de valor)
-  contrato?: Contrato;
+  idContrato?: string;
+  _contrato?: Contrato;
 }
 
 /**

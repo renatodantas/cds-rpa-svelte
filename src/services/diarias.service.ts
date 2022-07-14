@@ -1,26 +1,33 @@
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore/lite';
 import type { DateTime } from 'luxon';
 import { nanoid } from 'nanoid';
 import type { Diaria, DiariaSelecaoPagamento } from '../models/diaria';
-import { autonomoService } from './autonomos.service';
 import { contratoService } from './contratos.service';
+import { db } from './firebase.service';
 import { pagamentosService } from './pagamentos.service';
 
 class DiariasService {
 
+  private readonly COLLECTION = 'diarias';
+
   async list(idAutonomo: string): Promise<Diaria[]> {
-    return contratoService.MOCK.filter(c => c.autonomo.id === idAutonomo)[0].diarias;
+    const querySnapshot = query(
+      collection(db, this.COLLECTION),
+      where('idAutonomo', '==', idAutonomo));
+    const snapshot = await getDocs(querySnapshot);
+    return snapshot.docs.map(doc => doc.data()) as Diaria[];
   }
 
   async getByID(idDiaria: string): Promise<Diaria | undefined> {
-    return contratoService.MOCK
-      .flatMap(c => c.diarias)
-      .find(item => item.id === idDiaria);
+    const docSnap = await getDoc(doc(db, this.COLLECTION, idDiaria));
+    return docSnap.data() as Diaria;
   }
 
   async listDiariasPendentesPagamento(): Promise<DiariaSelecaoPagamento[]> {
     // 1 - Recuperar todas as diárias dos autônomos;
     let todasAsDiarias: DiariaSelecaoPagamento[] = [];
-    for (const autonomo of autonomoService.MOCK) {
+    //for (const autonomo of autonomoService.MOCK) {
+    for (const autonomo of []) {
       const newDiarias = (await this.list(autonomo.id)).map(d => ({
         ...d,
         vtSelecionado: false,
@@ -70,8 +77,8 @@ class DiariasService {
     if (!item.valorDiaria || item.valorDiaria === 0) {
       throw 'Valor da diária deve ser maior que R$ 0,00.';
     }
-    const allDiarias = contratoService.MOCK.flatMap(c => c.diarias);
-    const contrato = contratoService.MOCK.find(c => c.id === item.contrato.id);
+    const allDiarias = []; //contratoService.MOCK.flatMap(c => c.diarias);
+    const contrato = contratoService.getByID(item.idContrato);
     const indexDiariaExistente = allDiarias.findIndex(a => a.id === item.id);
 
     const novasDiarias: Diaria[] = [];
@@ -90,6 +97,18 @@ class DiariasService {
       contrato.diarias = [...contrato.diarias, ...novasDiarias];
     } else {
       contrato.diarias.splice(indexDiariaExistente, 1, item);
+    }
+
+
+    if (!item.id) {
+      item.id = nanoid();
+    }
+
+    const itemRef = doc(db, this.COLLECTION, item.id);
+    try {
+      await setDoc(itemRef, item);
+    } catch (err) {
+      console.log(Error(err));
     }
   }
 
